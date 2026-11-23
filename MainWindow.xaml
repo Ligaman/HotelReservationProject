@@ -15,7 +15,14 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid x:Name="ReservationsGrid" Grid.Row="0"
+                <DockPanel Grid.Row="0">
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <Label DockPanel.Dock="Left" Content="Филтър:"/>
+                        <Button DockPanel.Dock="Right" Content="Изчисти филтъра" Margin="8,3,0,3" Click="ReservationFilterClear_Click"/>
+                        <TextBox x:Name="ReservationFilter" TextChanged="ReservationFilter_TextChanged"
+                                 ToolTip="Търси по клиент, номер или тип на стаята"/>
+                    </DockPanel>
+                <DataGrid x:Name="ReservationsGrid"
                           AutoGenerateColumns="False" IsReadOnly="True"
                           SelectionMode="Single" CanUserAddRows="False"
                           SelectionChanged="ReservationsGrid_SelectionChanged">
@@ -28,6 +35,7 @@
                         <DataGridTextColumn Header="Освобождаване" Binding="{Binding CheckOut, StringFormat=dd.MM.yyyy}" Width="120"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                </DockPanel>
 
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
@@ -74,7 +82,14 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <DataGrid x:Name="RoomsGrid" Grid.Row="0"
+                <DockPanel Grid.Row="0">
+                    <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+                        <Label DockPanel.Dock="Left" Content="Филтър:"/>
+                        <Button DockPanel.Dock="Right" Content="Изчисти филтъра" Margin="8,3,0,3" Click="RoomFilterClear_Click"/>
+                        <TextBox x:Name="RoomFilter" TextChanged="RoomFilter_TextChanged"
+                                 ToolTip="Търси по номер или тип на стаята"/>
+                    </DockPanel>
+                <DataGrid x:Name="RoomsGrid"
                           AutoGenerateColumns="False" IsReadOnly="True"
                           SelectionMode="Single" CanUserAddRows="False"
                           SelectionChanged="RoomsGrid_SelectionChanged">
@@ -84,6 +99,7 @@
                         <DataGridTextColumn Header="Цена (€/нощ)" Binding="{Binding Price, StringFormat=F2}" Width="130"/>
                     </DataGrid.Columns>
                 </DataGrid>
+                </DockPanel>
 
                 <Grid Grid.Row="1" Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>

@@ -9,6 +9,10 @@ namespace HotelReservations
     {
         private const int SqliteConstraintError = 19;
 
+        // Всички записи от базата; в таблиците се показват само тези, които минават филтъра
+        private List<Room> _allRooms = new();
+        private List<Reservation> _allReservations = new();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -21,15 +25,48 @@ namespace HotelReservations
 
         private void LoadRooms()
         {
-            var rooms = Database.GetRooms();
-            RoomsGrid.ItemsSource = rooms;
-            ReservationRoomCombo.ItemsSource = rooms;
+            _allRooms = Database.GetRooms();
+            ReservationRoomCombo.ItemsSource = _allRooms;
+            ApplyRoomFilter();
         }
 
         private void LoadReservations()
         {
-            ReservationsGrid.ItemsSource = Database.GetReservations();
+            _allReservations = Database.GetReservations();
+            ApplyReservationFilter();
         }
+
+        // ---------- Филтриране ----------
+
+        // Показва само стаите, чийто номер или тип съдържа въведения текст
+        private void ApplyRoomFilter()
+        {
+            string text = RoomFilter.Text.Trim();
+            RoomsGrid.ItemsSource = _allRooms
+                .Where(r => Matches(r.Number, text) || Matches(r.Type, text))
+                .ToList();
+        }
+
+        // Показва само резервациите, при които клиентът, номерът или типът на стаята съдържа текста
+        private void ApplyReservationFilter()
+        {
+            string text = ReservationFilter.Text.Trim();
+            ReservationsGrid.ItemsSource = _allReservations
+                .Where(r => Matches(r.ClientName, text) || Matches(r.RoomNumber, text) || Matches(r.RoomType, text))
+                .ToList();
+        }
+
+        // Търсене без значение от главни/малки букви; празен филтър показва всичко
+        private static bool Matches(string value, string text) =>
+            text == "" || value.Contains(text, StringComparison.CurrentCultureIgnoreCase);
+
+        private void RoomFilter_TextChanged(object sender, TextChangedEventArgs e) => ApplyRoomFilter();
+
+        private void ReservationFilter_TextChanged(object sender, TextChangedEventArgs e) => ApplyReservationFilter();
+
+        private void RoomFilterClear_Click(object sender, RoutedEventArgs e) => RoomFilter.Clear();
+
+        private void ReservationFilterClear_Click(object sender, RoutedEventArgs e) => ReservationFilter.Clear();
 
         // ================= Стаи =================
 
