@@ -48,11 +48,16 @@ namespace HotelReservations
         }
 
         // Показва само резервациите, при които клиентът, номерът или типът на стаята съдържа текста
+        // и чийто престой попада (поне частично) в избрания период. Празна дата означава "без ограничение".
         private void ApplyReservationFilter()
         {
             string text = ReservationFilter.Text.Trim();
+            DateTime? from = FilterFromPicker.SelectedDate?.Date;
+            DateTime? to = FilterToPicker.SelectedDate?.Date;
+
             ReservationsGrid.ItemsSource = _allReservations
                 .Where(r => Matches(r.ClientName, text) || Matches(r.RoomNumber, text) || Matches(r.RoomType, text))
+                .Where(r => (from == null || r.CheckOut >= from) && (to == null || r.CheckIn <= to))
                 .ToList();
         }
 
@@ -66,7 +71,14 @@ namespace HotelReservations
 
         private void RoomFilterClear_Click(object sender, RoutedEventArgs e) => RoomFilter.Clear();
 
-        private void ReservationFilterClear_Click(object sender, RoutedEventArgs e) => ReservationFilter.Clear();
+        private void ReservationDateFilter_Changed(object? sender, SelectionChangedEventArgs e) => ApplyReservationFilter();
+
+        private void ReservationFilterClear_Click(object sender, RoutedEventArgs e)
+        {
+            ReservationFilter.Clear();
+            FilterFromPicker.SelectedDate = null;
+            FilterToPicker.SelectedDate = null;
+        }
 
         // ================= Стаи =================
 

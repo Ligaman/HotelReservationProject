@@ -19,6 +19,12 @@
                     <DockPanel DockPanel.Dock="Top" Margin="0,0,0,8">
                         <Label DockPanel.Dock="Left" Content="Филтър:"/>
                         <Button DockPanel.Dock="Right" Content="Изчисти филтъра" Margin="8,3,0,3" Click="ReservationFilterClear_Click"/>
+                        <DatePicker x:Name="FilterToPicker" DockPanel.Dock="Right" Width="120"
+                                    SelectedDateChanged="ReservationDateFilter_Changed"/>
+                        <Label DockPanel.Dock="Right" Content="до:"/>
+                        <DatePicker x:Name="FilterFromPicker" DockPanel.Dock="Right" Width="120"
+                                    SelectedDateChanged="ReservationDateFilter_Changed"/>
+                        <Label DockPanel.Dock="Right" Content="Период от:" Margin="8,0,0,0"/>
                         <TextBox x:Name="ReservationFilter" TextChanged="ReservationFilter_TextChanged"
                                  ToolTip="Търси по клиент, номер или тип на стаята"/>
                     </DockPanel>
